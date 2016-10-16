@@ -16,9 +16,11 @@ public class AITask implements Callable<List<Point>> {
 	protected int x_max = 15, x_min = 0;
 	protected int y_max = 15, y_min = 0;
 	List<Point> bestPoints;
+	int chess_num;
+	long lastStepTimestamp;
 
 	public AITask(int[][] isChessOn, boolean able_flag, int deep, int weight, int sbw, int bwf, int x_max, int x_min,
-			int y_max, int y_min, List<Point> bestPoints) {
+			int y_max, int y_min, List<Point> bestPoints, int chess_num, long lastStepTimestamp) {
 		this.isChessOn = isChessOn;
 		this.able_flag = able_flag;
 		this.deep = deep;
@@ -30,6 +32,8 @@ public class AITask implements Callable<List<Point>> {
 		this.y_max = y_max;
 		this.y_min = y_min;
 		this.bestPoints = bestPoints;
+		this.chess_num = chess_num;
+		this.lastStepTimestamp = lastStepTimestamp;
 	}
 
 	@Override
@@ -55,12 +59,20 @@ public class AITask implements Callable<List<Point>> {
 				return bestPoints;
 			}
 		}
+		if(chess_num <= 1){
+			int[] p = bests[new Random().nextInt(bests.length)];
+			bestPoints.add(new Point(p[0],p[1]));
+			return bestPoints;
+		}
 		for (int k = 0; k < bests.length; k++) {
-			System.out.println("getBests: "+k);
+//			System.out.println("getBests: "+k);
 			int i = bests[k][0];
 			int j = bests[k][1];
 			if(bestPoints.isEmpty()){
 				bestPoints.add(new Point(i,j));
+			}
+			if(lastStepTimestamp!=ChessPanel.lastStepTime){
+				return bestPoints;
 			}
 			// 预存当前边界值
 			int temp1 = x_min, temp2 = x_max, temp3 = y_min, temp4 = y_max;
@@ -483,6 +495,9 @@ public class AITask implements Callable<List<Point>> {
 	protected int findMin(int alpha, int beta, int step) {
 		int min = beta;
 		if (step == 0) {
+			return evaluate();
+		}
+		if(lastStepTimestamp!=ChessPanel.lastStepTime){
 			return evaluate();
 		}
 		int[][] rt = getBests(sbw);

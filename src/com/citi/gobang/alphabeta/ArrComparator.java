@@ -1,18 +1,14 @@
 package com.citi.gobang.alphabeta;
 
-/*ĞÕÃû£ºÍõ¼ÑĞÀ
- * Ñ§ºÅ£º0837077
- * */
-
 import java.util.Comparator;
 
 /**
- * ÅÅĞò Comparator
+ * æ’åº Comparator
  */
 public class ArrComparator implements Comparator<Object> {
     int column = 2;
 
-    int sortOrder = -1; // µİ¼õ
+    int sortOrder = -1; // é€’å‡
 
     public ArrComparator() {
     }

@@ -1,8 +1,5 @@
 package com.citi.gobang.alphabeta;
 
-/*ĞÕÃû£ºÍõ¼ÑĞÀ
- * Ñ§ºÅ£º0837077
- * */
 import javax.swing.*;
 
 import java.awt.*;
@@ -12,24 +9,24 @@ import java.net.URL;
 
 @SuppressWarnings("serial")
 public class ChessMap extends JFrame {
-	private ImageIcon map; // ÆåÅÌ±³¾°Î»Í¼
-	private ImageIcon blackchess; // ºÚ×ÓÎ»Í¼
-	private ImageIcon whitechess; // °××ÓÎ»Í¼
-	private ChessPanel cp; // ÆåÅÌ
+	private ImageIcon map; // æ£‹ç›˜èƒŒæ™¯ä½å›¾
+	private ImageIcon blackchess; // é»‘å­ä½å›¾
+	private ImageIcon whitechess; // ç™½å­ä½å›¾
+	private ChessPanel cp; // æ£‹ç›˜
 	public static boolean isRunning;
 	private JPanel east;
 	private JPanel west;
 	private static final int FINAL_WIDTH = 540;
 	private static final int FINAL_HEIGHT = 500;
-	// ÒÔÏÂÎªÏÂÀ­²Ëµ¥
+	// ä»¥ä¸‹ä¸ºä¸‹æ‹‰èœå•
 	private JMenuBar menubar;
-	private JMenu[] menu = { new JMenu("¿ªÊ¼"), new JMenu("ÉèÖÃ"), new JMenu("°ïÖú") };
-	private JMenuItem[] menuitem1 = { new JMenuItem("ÖØĞÂ¿ªÊ¼"), new JMenuItem("»ÚÆå"), new JMenuItem("ÍË³ö") };
-	private JMenuItem[] menuitem2 = { new JMenuItem("½ûÊÖÑ¡Ôñ"), new JMenuItem("ÈË»ú²©ŞÄ"), new JMenuItem("ÈËÈË¶ÔŞÄ"), new JMenuItem("ÏÂÆåÏŞÊ±")};
-	private JMenuItem[] menuitem3 = { new JMenuItem("¹æÔò"), new JMenuItem("¹ØÓÚ") };
-	private JButton[] buttons = {new JButton("ÖØĞÂ¿ªÊ¼"), new JButton("ÈËÈË¶ÔŞÄ"), new JButton("ÈË»ú²©ŞÄ"), new JButton("»ÚÆå")};
-	private JLabel[] labels = {new JLabel("µ±Ç°£ººÚ·½"), new JLabel("ÓÃÊ±£º0s"), new JLabel("²½Êı£º0"), new JLabel("ÉÏÒ»²½£º"),new JLabel("µçÄÔ£ºÎŞ"),new JLabel("ÏŞÊ±£º"),new JLabel("½ûÊÖ£ºÓĞ"),new JLabel("»ñÊ¤£ºÎŞ")};
-	private boolean haveai = true; // ÈËÓëÈËÏÂ»¹ÊÇÈËÓëµçÄÔÏÂ£¬trueÓëµçÄÔÏÂ
+	private JMenu[] menu = { new JMenu("å¼€å§‹"), new JMenu("è®¾ç½®"), new JMenu("å¸®åŠ©") };
+	private JMenuItem[] menuitem1 = { new JMenuItem("é‡æ–°å¼€å§‹"), new JMenuItem("æ‚”æ£‹"), new JMenuItem("é€€å‡º") };
+	private JMenuItem[] menuitem2 = { new JMenuItem("ç¦æ‰‹é€‰æ‹©"), new JMenuItem("äººæœºåšå¼ˆ"), new JMenuItem("äººäººå¯¹å¼ˆ"), new JMenuItem("ä¸‹æ£‹é™æ—¶")};
+	private JMenuItem[] menuitem3 = { new JMenuItem("è§„åˆ™"), new JMenuItem("å…³äº") };
+	private JButton[] buttons = {new JButton("é‡æ–°å¼€å§‹"), new JButton("äººäººå¯¹å¼ˆ"), new JButton("äººæœºåšå¼ˆ"), new JButton("æ‚”æ£‹")};
+	private JLabel[] labels = {new JLabel("å½“å‰ï¼šé»‘æ–¹"), new JLabel("ç”¨æ—¶ï¼š0s"), new JLabel("æ­¥æ•°ï¼š0"), new JLabel("ä¸Šä¸€æ­¥ï¼š"),new JLabel("ç”µè„‘ï¼šæ— "),new JLabel("é™æ—¶ï¼š"),new JLabel("ç¦æ‰‹ï¼šæœ‰"),new JLabel("è·èƒœï¼šæ— ")};
+	private boolean haveai = true; // äººä¸äººä¸‹è¿˜æ˜¯äººä¸ç”µè„‘ä¸‹ï¼Œtrueä¸ç”µè„‘ä¸‹
 	Mouseclicked mouseclicked = new Mouseclicked();
 	MouseMoved mousemoved = new MouseMoved();
 	Menuitemclicked menuclicked = new Menuitemclicked();
@@ -43,20 +40,20 @@ public class ChessMap extends JFrame {
 	JLabel ableFlagLabel = labels[6];
 	JLabel winerLabel = labels[7];
 
-	// ¹¹Ôìº¯Êı
+	// æ„é€ å‡½æ•°
 	public ChessMap() {
-		setTitle("Îå×ÓÆå ");
+		setTitle("äº”å­æ£‹ ");
 		setSize(FINAL_WIDTH, FINAL_HEIGHT);
 		setResizable(false);
 		init();
 		setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - FINAL_WIDTH / 2,
 				Toolkit.getDefaultToolkit().getScreenSize().height / 2 - FINAL_HEIGHT / 2);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		cp.reset(); // ĞÂ¿ªÆå¾Ö£¬¼´:ÖÃÆåÅÌÎª¿ÕµÈ
+		cp.reset(); // æ–°å¼€æ£‹å±€ï¼Œå³:ç½®æ£‹ç›˜ä¸ºç©ºç­‰
 		setVisible(true);
 	}
 
-	// ³õÊ¼»¯ÓëÄ¬ÈÏÖµ
+	// åˆå§‹åŒ–ä¸é»˜è®¤å€¼
 	public void init() {
 		map = new ImageIcon(getClass().getResource("background.jpg"));
 		blackchess = new ImageIcon(getClass().getResource("blackchess.gif"));
@@ -123,39 +120,40 @@ public class ChessMap extends JFrame {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				cp.putOne(cp.bw);
-				isRunning = false;
-				
+				boolean result = cp.putOne(cp.bw, cp.lastStepTime);
+				if(result){
+					isRunning = false;
+				}
 			}
 		}).start();
 	}
 	
-	class Mouseclicked extends MouseAdapter // ÅĞ¶ÏÊó±ê×ó»÷²¢Í¨ÖªÆåÅÌºÍµçÄÔ
+	class Mouseclicked extends MouseAdapter // åˆ¤æ–­é¼ æ ‡å·¦å‡»å¹¶é€šçŸ¥æ£‹ç›˜å’Œç”µè„‘
 	{
 		public void mouseClicked(MouseEvent e) {
 			if (cp.win == false && isRunning == false) {
-				if (haveai) { // ºÍµçÄÔ²©ŞÄ
+				if (haveai) { // å’Œç”µè„‘åšå¼ˆ
 					Point p1 = new Point();
 					p1 = cp.getPoint(e.getX(), e.getY());
 					int x = p1.x;
 					int y = p1.y;
-					// Èç¹û¸ÃÎ»ÖÃÒÑ¾­·ÅÖÃÆå×Ó
+					// å¦‚æœè¯¥ä½ç½®å·²ç»æ”¾ç½®æ£‹å­
 					// System.out.println("x="+x+",y="+y);
 					if (cp.isChessOn[x][y] != 2)
 						return;
-					// Íæ¼ÒÎªºÚÆå,¿¼ÂÇ½ûÊÖ
-					if (cp.able_flag && cp.bw == 0) {// able_flagÉèÖÃÁË½ûÊÖ²¢ÇÒÊÇºÚÆåÔÚÏÂ
+					// ç©å®¶ä¸ºé»‘æ£‹,è€ƒè™‘ç¦æ‰‹
+					if (cp.able_flag && cp.bw == 0) {// able_flagè®¾ç½®äº†ç¦æ‰‹å¹¶ä¸”æ˜¯é»‘æ£‹åœ¨ä¸‹
 						int type = cp.getType(x, y, cp.bw);
 						String str = null;
 						switch (type) {
 						case 20:
-							str = "ºÚ³¤Á¬½ûÊÖ!ÇëÑ¡ÔñÆäËüÎ»ÖÃÏÂÆå!";
+							str = "é»‘é•¿è¿ç¦æ‰‹!è¯·é€‰æ‹©å…¶å®ƒä½ç½®ä¸‹æ£‹!";
 							break;
 						case 21:
-							str = "ºÚËÄËÄ½ûÊÖ!ÇëÑ¡ÔñÆäËüÎ»ÖÃÏÂÆå!";
+							str = "é»‘å››å››ç¦æ‰‹!è¯·é€‰æ‹©å…¶å®ƒä½ç½®ä¸‹æ£‹!";
 							break;
 						case 22:
-							str = "ºÚÈıÈı½ûÊÖ!ÇëÑ¡ÔñÆäËüÎ»ÖÃÏÂÆå!";
+							str = "é»‘ä¸‰ä¸‰ç¦æ‰‹!è¯·é€‰æ‹©å…¶å®ƒä½ç½®ä¸‹æ£‹!";
 							break;
 						default:
 							break;
@@ -168,8 +166,8 @@ public class ChessMap extends JFrame {
 					boolean flag = cp.haveWin(x, y, cp.bw);
 					cp.update(x, y);
 					cp.repaint();
-					cp.putVoice(); // Âä×ÓÉùÒô
-					// µÚÒ»²½Æå,Ğè³õÊ¼»¯ÉèÖÃ±ß½çÖµ
+					cp.putVoice(); // è½å­å£°éŸ³
+					// ç¬¬ä¸€æ­¥æ£‹,éœ€åˆå§‹åŒ–è®¾ç½®è¾¹ç•Œå€¼
 					if (cp.chess_num == 1) {
 						if (x - 1 >= 0)
 							cp.x_min = x - 1;
@@ -186,28 +184,28 @@ public class ChessMap extends JFrame {
 						return;
 					}
 					asyncAI();
-				} else { // ºÍÈË²©ŞÄ
+				} else { // å’Œäººåšå¼ˆ
 					Point p1 = new Point();
 					p1 = cp.getPoint(e.getX(), e.getY());
 					int x = p1.x;
 					int y = p1.y;
-					// Èç¹û¸ÃÎ»ÖÃÒÑ¾­·ÅÖÃÆå×Ó
+					// å¦‚æœè¯¥ä½ç½®å·²ç»æ”¾ç½®æ£‹å­
 //					System.out.println("x=" + x + ",y=" + y);
 					if (cp.isChessOn[x][y] != 2)
 						return;
-					// Íæ¼ÒÎªºÚÆå,¿¼ÂÇ½ûÊÖ
+					// ç©å®¶ä¸ºé»‘æ£‹,è€ƒè™‘ç¦æ‰‹
 					if (cp.able_flag && cp.bw == 0) {
 						int type = cp.getType(x, y, cp.bw);
 						String str = null;
 						switch (type) {
 						case 20:
-							str = "ºÚ³¤Á¬½ûÊÖ!ÇëÑ¡ÔñÆäËüÎ»ÖÃÏÂÆå!";
+							str = "é»‘é•¿è¿ç¦æ‰‹!è¯·é€‰æ‹©å…¶å®ƒä½ç½®ä¸‹æ£‹!";
 							break;
 						case 21:
-							str = "ºÚËÄËÄ½ûÊÖ!ÇëÑ¡ÔñÆäËüÎ»ÖÃÏÂÆå!";
+							str = "é»‘å››å››ç¦æ‰‹!è¯·é€‰æ‹©å…¶å®ƒä½ç½®ä¸‹æ£‹!";
 							break;
 						case 22:
-							str = "ºÚÈıÈı½ûÊÖ!ÇëÑ¡ÔñÆäËüÎ»ÖÃÏÂÆå!";
+							str = "é»‘ä¸‰ä¸‰ç¦æ‰‹!è¯·é€‰æ‹©å…¶å®ƒä½ç½®ä¸‹æ£‹!";
 							break;
 						default:
 							break;
@@ -219,9 +217,9 @@ public class ChessMap extends JFrame {
 					}
 					boolean flag = cp.haveWin(x, y, cp.bw);
 					cp.update(x, y);
-					cp.putVoice(); // Âä×ÓÉùÒô
+					cp.putVoice(); // è½å­å£°éŸ³
 					cp.repaint();
-					// µÚÒ»²½Æå,Ğè³õÊ¼»¯ÉèÖÃ±ß½çÖµ
+					// ç¬¬ä¸€æ­¥æ£‹,éœ€åˆå§‹åŒ–è®¾ç½®è¾¹ç•Œå€¼
 					if (cp.chess_num == 1) {
 						if (x - 1 >= 0)
 							cp.x_min = x - 1;
@@ -243,7 +241,7 @@ public class ChessMap extends JFrame {
 
 	}
 
-	class MouseMoved implements MouseMotionListener // µ÷ÊÔÓÃ£¬»ñµÃÊó±êÎ»ÖÃ
+	class MouseMoved implements MouseMotionListener // è°ƒè¯•ç”¨ï¼Œè·å¾—é¼ æ ‡ä½ç½®
 	{
 		public void mouseMoved(MouseEvent e) {
 			cp.showMousePos(e.getPoint());
@@ -260,70 +258,69 @@ public class ChessMap extends JFrame {
 			if(cp.win){
 				timer.stop();
 				if(cp.win_bw == cp.BLACK_ONE){
-					winerLabel.setText("»ñÊ¤£ººÚ·½");
+					winerLabel.setText("è·èƒœï¼šé»‘æ–¹");
 				}else{
-					winerLabel.setText("»ñÊ¤£º°×·½");
+					winerLabel.setText("è·èƒœï¼šç™½æ–¹");
 				}
 			}else{
-				winerLabel.setText("»ñÊ¤£º");
+				winerLabel.setText("è·èƒœï¼š");
 			}
 			
 			if(haveai){
 				if(cp.sbw == cp.BLACK_ONE){
-					aiLabel.setText("µçÄÔ£º°×·½");
+					aiLabel.setText("ç”µè„‘ï¼šç™½æ–¹");
 				}else{
-					aiLabel.setText("µçÄÔ£ººÚ·½");
+					aiLabel.setText("ç”µè„‘ï¼šé»‘æ–¹");
 				}
 			}else{
-				aiLabel.setText("µçÄÔ£ºÎŞ");
+				aiLabel.setText("ç”µè„‘ï¼šæ— ");
 			}
-			timeLimitLabel.setText("ÏŞÊ±£º"+cp.timeLimit+" s");
+			timeLimitLabel.setText("é™æ—¶ï¼š"+cp.timeLimit+" s");
 			
-			stepLabel.setText("ÒÑÏÂÆå£º"+cp.chess_num);
+			stepLabel.setText("å·²ä¸‹æ£‹ï¼š"+cp.chess_num);
 			
 			long before = cp.lastStepTime;
 			long cost = (System.currentTimeMillis() - before)/1000;
-			costTimeLabel.setText("ÓÃÊ±£º"+cost+" s");
+			costTimeLabel.setText("ç”¨æ—¶ï¼š"+cost+" s");
 			
 			if(cp.bw == cp.BLACK_ONE){
-				currentLabel.setText("µ±Ç°£ººÚÉ«");
+				currentLabel.setText("å½“å‰ï¼šé»‘è‰²");
 			}else{
-				currentLabel.setText("µ±Ç°£º°×É«");
+				currentLabel.setText("å½“å‰ï¼šç™½è‰²");
 			}
 			if(cp.able_flag){
-				ableFlagLabel.setText("½ûÊÖ£ºÓĞ");
+				ableFlagLabel.setText("ç¦æ‰‹ï¼šæœ‰");
 			}else{
-				ableFlagLabel.setText("½ûÊÖ£ºÎŞ");
+				ableFlagLabel.setText("ç¦æ‰‹ï¼šæ— ");
 			}
 			if(cp.chess_num>0){
-				int x = cp.pre[cp.chess_num-1][0];
-				int y = cp.pre[cp.chess_num-1][1];
-				preLabel.setText("ÉÏÒ»²½£º("+x+","+y+")");
+				preLabel.setText("ä¸Šä¸€æ­¥ï¼š"+cp.lastStep);
 			}else{
-				preLabel.setText("ÉÏÒ»²½£º");
+				preLabel.setText("ä¸Šä¸€æ­¥ï¼š");
 			}
 		}
 		
 	}
 
-	class Menuitemclicked implements ActionListener // ²Ëµ¥ÏûÏ¢´¦Àí
+	class Menuitemclicked implements ActionListener // èœå•æ¶ˆæ¯å¤„ç†
 	{
 		public void actionPerformed(ActionEvent e) {
 			AbstractButton target = (AbstractButton) e.getSource();
 			String actionCommand = target.getActionCommand();
-			if (actionCommand.equals("Restart")) { // ÖØ¿ªÒ»¾Ö
+			if (actionCommand.equals("Restart")) { // é‡å¼€ä¸€å±€
+				isRunning = false;
 				cp.reset();
 				timer.restart();
 				if (haveai&&cp.sbw == cp.WHITE_ONE)
 					cp.update(7, 7);
 				// player=cp.BLACK_ONE;
 			}
-			if (actionCommand.equals("Rollback")) { // »ÚÆå
-				if(isRunning){
-					JOptionPane.showMessageDialog(null, "ÇëµÈ´ıµçÄÔÏÂÍê!");
-					return;
-				}
-				// µ±Ç°ÂÖµ½Íæ¼ÒÏÂÆå,È¡ÏûÁ½²½ ·ñÔò,È¡ÏûÒ»²½
+			if (actionCommand.equals("Rollback")) { // æ‚”æ£‹
+//				if(isRunning){
+//					JOptionPane.showMessageDialog(null, "è¯·ç­‰å¾…ç”µè„‘ä¸‹å®Œ!");
+//					return;
+//				}
+				// å½“å‰è½®åˆ°ç©å®¶ä¸‹æ£‹,å–æ¶ˆä¸¤æ­¥ å¦åˆ™,å–æ¶ˆä¸€æ­¥
 				if(haveai){
 					if (cp.chess_num >= 2 && cp.bw == cp.sbw) {
 						cp.isChessOn[cp.pre[cp.chess_num - 1][0]][cp.pre[cp.chess_num - 1][1]] = 2;
@@ -333,6 +330,8 @@ public class ChessMap extends JFrame {
 					} else if (cp.chess_num >= 1 && cp.bw == 1 - cp.sbw) {
 						cp.isChessOn[cp.pre[cp.chess_num - 1][0]][cp.pre[cp.chess_num - 1][1]] = 2;
 						cp.chess_num--;
+						cp.bw = 1-cp.bw;
+						isRunning = false;
 						cp.repaint();
 					}
 				}else{
@@ -343,34 +342,35 @@ public class ChessMap extends JFrame {
 						cp.bw = 1-cp.bw;
 					}
 				}
-			} else if (actionCommand.equals("Exit")) { // ÍË³ö
+			} else if (actionCommand.equals("Exit")) { // é€€å‡º
 				System.exit(1);
-			} else if (actionCommand.equals("Forbid")) { // ½ûÊÖÑ¡Ôñ
-				Object[] options = { "ÎŞ½ûÊÖ", "ÓĞ½ûÊÖ" };
-				int sel = JOptionPane.showOptionDialog(null, "ÄãµÄÑ¡Ôñ£º", "½ûÊÖÑ¡Ôñ", JOptionPane.DEFAULT_OPTION,
+			} else if (actionCommand.equals("Forbid")) { // ç¦æ‰‹é€‰æ‹©
+				Object[] options = { "æ— ç¦æ‰‹", "æœ‰ç¦æ‰‹" };
+				int sel = JOptionPane.showOptionDialog(null, "ä½ çš„é€‰æ‹©ï¼š", "ç¦æ‰‹é€‰æ‹©", JOptionPane.DEFAULT_OPTION,
 						JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 				if (sel == 1) {
 					cp.able_flag = true;
-					System.out.println("ÓĞ½ûÊÖ");
+					System.out.println("æœ‰ç¦æ‰‹");
 				} else {
 					cp.able_flag = false;
-					System.out.println("ÎŞ½ûÊÖ");
+					System.out.println("æ— ç¦æ‰‹");
 				}
-			} else if (actionCommand.equals("Robot")) { // ÈË»ú²©ŞÄ
+			} else if (actionCommand.equals("Robot")) { // äººæœºåšå¼ˆ
+				isRunning = false;
 				haveai = true;
-				Object[] options = { "ÈËÀàÏÈÊÖ", "»úÆ÷ÏÈÊÖ" };
-				int sel = JOptionPane.showOptionDialog(null, "ÄãµÄÑ¡Ôñ£º", "ÏÈÊÖÑ¡Ôñ", JOptionPane.DEFAULT_OPTION,
+				Object[] options = { "äººç±»å…ˆæ‰‹", "æœºå™¨å…ˆæ‰‹" };
+				int sel = JOptionPane.showOptionDialog(null, "ä½ çš„é€‰æ‹©ï¼š", "å…ˆæ‰‹é€‰æ‹©", JOptionPane.DEFAULT_OPTION,
 						JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-				if (sel == 1) { // »úÆ÷ÏÈÊÖ
+				if (sel == 1) { // æœºå™¨å…ˆæ‰‹
 					cp.sbw = cp.WHITE_ONE;
-					System.out.println("»úÆ÷ÏÈÊÖ");
-				} else { // ÈËÏÈÊÖ
+					System.out.println("æœºå™¨å…ˆæ‰‹");
+				} else { // äººå…ˆæ‰‹
 					// player=cp.BLACK_ONE;
 					cp.sbw = cp.BLACK_ONE;
-					System.out.println("ÈËÏÈÊÖ");
+					System.out.println("äººå…ˆæ‰‹");
 				}
 				if (cp.win) {
-					JOptionPane.showMessageDialog(null, "Æå¾ÖÒÑ¾­½áÊø, ÇëÖØĞÂ¿ªÊ¼ĞÂµÄÆå¾Ö!");
+					JOptionPane.showMessageDialog(null, "æ£‹å±€å·²ç»ç»“æŸ, è¯·é‡æ–°å¼€å§‹æ–°çš„æ£‹å±€!");
 					return;
 				}
 				if (cp.bw == 1 - cp.sbw) {
@@ -383,27 +383,28 @@ public class ChessMap extends JFrame {
 					}
 				}
 				cp.lastStepTime = System.currentTimeMillis();
-			} else if (actionCommand.equals("Human")) { // ÈËÈË²©ŞÄ
+			} else if (actionCommand.equals("Human")) { // äººäººåšå¼ˆ
+				isRunning = false;
 				haveai = false;
 				cp.setHumanhuman(true);
-			} else if (actionCommand.equals("TimeLimit")) { // ÈËÈË²©ŞÄ
+			} else if (actionCommand.equals("TimeLimit")) { // äººäººåšå¼ˆ
 				String q = JOptionPane.showInputDialog(null,
-		                "ÏÂÆåÃ¿²½×î´óË¼¿¼Ê±¼ä£¨Ãë£©", cp.timeLimit);
+		                "ä¸‹æ£‹æ¯æ­¥æœ€å¤§æ€è€ƒæ—¶é—´ï¼ˆç§’ï¼‰", cp.timeLimit);
 				if(q!=null){
 					int number = Integer.parseInt(q);
 					cp.timeLimit = number;
 				}
-			} else if (actionCommand.equals("Rule")) { // ¹æÔò
-				JOptionPane.showConfirmDialog(null, "1¡¢ÎŞ½ûÊÖ£º" + "\n" + "   ºÚ°×Ë«·½ÒÀ´ÎÂä×Ó£¬ÈÎÒ»·½ÏÈÔÚÆåÅÌÉÏĞÎ³ÉÁ¬ĞøµÄÎå¸ö(º¬Îå¸öÒÔÉÏ)Æå×ÓµÄÒ»·½ÎªÊ¤¡£"
-						+ "\n" + "2¡¢ÓĞ½ûÊÖ£º£¨×ß½ûÊÖ¾ÍÊä£¬½ûÊÖ²»ÄÜÂä×Ó£©" + "\n" + "   ¼øÓÚÎŞ½ûÊÖ¹æÔòºÚÆå±ØÊ¤£¬ÈËÃÇ²»¶Ï²ÉÓÃÒ»Ğ©·½·¨ÏŞÖÆºÚÆåÏÈĞĞµÄÓÅÊÆ£¬ÒÔÆ½ºâºÚ°×Ë«·½µÄĞÎÊ½¡£" + "\n"
-						+ "   ÓÚÊÇÕë¶ÔºÚÆåµÄ¸÷ÖÖ½ûÊÖÖğ½¥ĞÎ³É¡£" + "\n" + "   ½ûÊÖÖ÷Òª·ÖÎªÒÔÏÂ¼¸Àà£º" + "\n" + "   (1)ºÚ³¤Á¬½ûÊÖ£ºÁ¬³ÉÁù¸öÒÔÉÏÁ¬ĞøÏàÍ¬µÄÆå×Ó¡£" + "\n"
-						+ "   (2)ºÚÈıÈı½ûÊÖ£ºÁ½¸öÒÔÉÏµÄ»îÈı¡£" + "\n" + "   (3)ºÚËÄËÄ½ûÊÖ£ºÁ½¸öÒÔÉÏµÄËÄ¡£" + "\n" + "   ½ûÊÖÊÇÕë¶ÔºÚÆå¶øÑÔµÄ£¬°×ÆåÃ»ÓĞÈÎºÎ½ûÊÖ¡£",
-						"¹æÔò", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
-			} else if (actionCommand.equals("About")) { // °æÈ¨Óë°ïÖú
+			} else if (actionCommand.equals("Rule")) { // è§„åˆ™
+				JOptionPane.showConfirmDialog(null, "1ã€æ— ç¦æ‰‹ï¼š" + "\n" + "   é»‘ç™½åŒæ–¹ä¾æ¬¡è½å­ï¼Œä»»ä¸€æ–¹å…ˆåœ¨æ£‹ç›˜ä¸Šå½¢æˆè¿ç»­çš„äº”ä¸ª(å«äº”ä¸ªä»¥ä¸Š)æ£‹å­çš„ä¸€æ–¹ä¸ºèƒœã€‚"
+						+ "\n" + "2ã€æœ‰ç¦æ‰‹ï¼šï¼ˆèµ°ç¦æ‰‹å°±è¾“ï¼Œç¦æ‰‹ä¸èƒ½è½å­ï¼‰" + "\n" + "   é‰´äºæ— ç¦æ‰‹è§„åˆ™é»‘æ£‹å¿…èƒœï¼Œäººä»¬ä¸æ–­é‡‡ç”¨ä¸€äº›æ–¹æ³•é™åˆ¶é»‘æ£‹å…ˆè¡Œçš„ä¼˜åŠ¿ï¼Œä»¥å¹³è¡¡é»‘ç™½åŒæ–¹çš„å½¢å¼ã€‚" + "\n"
+						+ "   äºæ˜¯é’ˆå¯¹é»‘æ£‹çš„å„ç§ç¦æ‰‹é€æ¸å½¢æˆã€‚" + "\n" + "   ç¦æ‰‹ä¸»è¦åˆ†ä¸ºä»¥ä¸‹å‡ ç±»ï¼š" + "\n" + "   (1)é»‘é•¿è¿ç¦æ‰‹ï¼šè¿æˆå…­ä¸ªä»¥ä¸Šè¿ç»­ç›¸åŒçš„æ£‹å­ã€‚" + "\n"
+						+ "   (2)é»‘ä¸‰ä¸‰ç¦æ‰‹ï¼šä¸¤ä¸ªä»¥ä¸Šçš„æ´»ä¸‰ã€‚" + "\n" + "   (3)é»‘å››å››ç¦æ‰‹ï¼šä¸¤ä¸ªä»¥ä¸Šçš„å››ã€‚" + "\n" + "   ç¦æ‰‹æ˜¯é’ˆå¯¹é»‘æ£‹è€Œè¨€çš„ï¼Œç™½æ£‹æ²¡æœ‰ä»»ä½•ç¦æ‰‹ã€‚",
+						"è§„åˆ™", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+			} else if (actionCommand.equals("About")) { // ç‰ˆæƒä¸å¸®åŠ©
 				JOptionPane
 						.showConfirmDialog(null,
-								"ÍÅ¶Ó³ÉÔ±£º\n" + "ÖÓÄş   nz11726\n" + "Mars       07061225\n",
-								"¹ØÓÚ", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+								"å›¢é˜Ÿæˆå‘˜ï¼š\n" + "é’Ÿå®   nz11726\n" + "",
+								"å…³äº", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 

@@ -6,6 +6,7 @@ import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
@@ -18,47 +19,52 @@ import java.util.concurrent.TimeoutException;
 
 @SuppressWarnings("serial")
 public class ChessPanel extends JPanel {
-	private ImageIcon map; // ÆåÅÌ±³¾°Î»Í¼
-	private ImageIcon blackchess; // ºÚ×ÓÎ»Í¼
-	private ImageIcon whitechess; // °××ÓÎ»Í¼
+	private ImageIcon map; // æ£‹ç›˜èƒŒæ™¯ä½å›¾
+	private ImageIcon blackchess; // é»‘å­ä½å›¾
+	private ImageIcon whitechess; // ç™½å­ä½å›¾
 	private ImageIcon red = new ImageIcon(getClass().getResource("red.png"));
-	public int isChessOn[][]; // Æå¾Ö
-	protected boolean win = false; // ÊÇ·ñÒÑ¾­·Ö³öÊ¤¸º
-	protected int win_bw; // Ê¤ÀûÆåÉ«
-	protected int deep = 8, weight = 16; // ËÑË÷µÄÉî¶ÈÒÔ¼°¹ã¶È
-	public int drawn_num = 110; // ºÍÆå²½Êı
-	int chess_num = 0; // ×ÜÂä×ÓÊıÄ¿
-	public int[][] pre = new int[drawn_num + 1][2]; // ¼ÇÂ¼ÏÂÆåµãµÄx,y×ø±ê ×î¶à (drawn_num
-													// + 1) ¸ö
-	public int sbw = 0; // Íæ¼ÒÆåÉ«ºÚÉ«0£¬°×É«1
-	public int bw = 0; // µ±Ç°Ó¦¸ÃÏÂµÄÆåÉ« 0£ººÚÉ«(Ä¬ÈÏ)£¬ 1£º°×É«
-	// ±ß½çÖµ,ÓÃÓÚËÙ¶ÈÓÅ»¯
+	public int isChessOn[][]; // æ£‹å±€
+	protected boolean win = false; // æ˜¯å¦å·²ç»åˆ†å‡ºèƒœè´Ÿ
+	protected int win_bw; // èƒœåˆ©æ£‹è‰²
+	protected int deep = 8, weight = 16; // æœç´¢çš„æ·±åº¦ä»¥åŠå¹¿åº¦
+	public int drawn_num = 110; // å’Œæ£‹æ­¥æ•°
+	int chess_num = 0; // æ€»è½å­æ•°ç›®
+	public int[][] pre = new int[drawn_num + 1][2]; // è®°å½•ä¸‹æ£‹ç‚¹çš„x,yåæ ‡ æœ€å¤š (drawn_num
+													// + 1) ä¸ª
+	public int sbw = 0; // ç©å®¶æ£‹è‰²é»‘è‰²0ï¼Œç™½è‰²1
+	public int bw = 0; // å½“å‰åº”è¯¥ä¸‹çš„æ£‹è‰² 0ï¼šé»‘è‰²(é»˜è®¤)ï¼Œ 1ï¼šç™½è‰²
+	// è¾¹ç•Œå€¼,ç”¨äºé€Ÿåº¦ä¼˜åŒ–
 	protected int x_max = 15, x_min = 0;
 	protected int y_max = 15, y_min = 0;
-	protected boolean able_flag = true; // ÊÇ·ñÑ¡Ôñ½ûÊÖ±êÖ¾ 0:ÎŞ½ûÊÖ 1:ÓĞ½ûÊÖ(Ä¬ÈÏ
-	private int h; // Æå×Ó³¤
-	private int w; // Æå×Ó¿í
-	private int insx; // ²åÈëÆå×ÓµÄÎ»ÖÃ
+	protected boolean able_flag = true; // æ˜¯å¦é€‰æ‹©ç¦æ‰‹æ ‡å¿— 0:æ— ç¦æ‰‹ 1:æœ‰ç¦æ‰‹(é»˜è®¤
+	private int h; // æ£‹å­é•¿
+	private int w; // æ£‹å­å®½
+	private int insx; // æ’å…¥æ£‹å­çš„ä½ç½®
 	private int insy;
-	private Point mousePoint; // Êó±êµ±Ç°Î»ÖÃ
-	private int winer; // »ñÊ¤·½
-	private boolean humanhuman = false; // ÊÇ·ñÊÇÈËÈË¶ÔŞÄ
-	private int plast = 0; // ×ßÁË¼¸²½ÁË£¬
-	public int BLACK_ONE; // 0±íºÚ×Ó
-	public int WHITE_ONE; // 1±í°××Ó
-	public int NONE_ONE; // 2±íÎŞ×Ó
-	public int N; // ÆåÅÌ±ß³¤
-	public long lastStepTime = System.currentTimeMillis();
+	private Point mousePoint; // é¼ æ ‡å½“å‰ä½ç½®
+	private int winer; // è·èƒœæ–¹
+	private boolean humanhuman = false; // æ˜¯å¦æ˜¯äººäººå¯¹å¼ˆ
+	private int plast = 0; // èµ°äº†å‡ æ­¥äº†ï¼Œ
+	public int BLACK_ONE; // 0è¡¨é»‘å­
+	public int WHITE_ONE; // 1è¡¨ç™½å­
+	public int NONE_ONE; // 2è¡¨æ— å­
+	public int N; // æ£‹ç›˜è¾¹é•¿
+	public static long lastStepTime = System.currentTimeMillis();
+	public String lastStep = "";
 	public long timeLimit = 60;
+	public final static String[] X_AXIS = new String[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
+			"M", "N", "O" };
+	public final static String[] Y_AXIS = new String[] { "15", "14", "13", "12", "11", "10", "9", "8", "7", "6", "5",
+			"4", "3", "2", "1", "0" };
 
-	// -------ÉùÒô
-	String[] choics = { "put.wav", "win.wav", "lost.wav" }; // ÉùÒôÎÄ¼şÃûÊı×é
-	URL file1 = getClass().getResource(choics[0]); // Âä×ÓÉùÒôÎÄ¼ş
-	URL file2 = getClass().getResource(choics[1]); // »ñÊ¤ÉùÒôÎÄ¼ş
-	URL file3 = getClass().getResource(choics[2]); // Ê§°ÜÉùÒôÎÄ¼ş
-	AudioClip soundPut = java.applet.Applet.newAudioClip(file1); // Âä×ÓÉùÒô¼ô¼­¶ÔÏó
-	AudioClip soundWin = java.applet.Applet.newAudioClip(file2); // »ñÊ¤ÉùÒô¼ô¼­¶ÔÏó
-	AudioClip soundLost = java.applet.Applet.newAudioClip(file3); // Ê§°ÜÉùÒô¼ô¼­¶ÔÏó
+	// -------å£°éŸ³
+	String[] choics = { "put.wav", "win.wav", "lost.wav" }; // å£°éŸ³æ–‡ä»¶åæ•°ç»„
+	URL file1 = getClass().getResource(choics[0]); // è½å­å£°éŸ³æ–‡ä»¶
+	URL file2 = getClass().getResource(choics[1]); // è·èƒœå£°éŸ³æ–‡ä»¶
+	URL file3 = getClass().getResource(choics[2]); // å¤±è´¥å£°éŸ³æ–‡ä»¶
+	AudioClip soundPut = java.applet.Applet.newAudioClip(file1); // è½å­å£°éŸ³å‰ªè¾‘å¯¹è±¡
+	AudioClip soundWin = java.applet.Applet.newAudioClip(file2); // è·èƒœå£°éŸ³å‰ªè¾‘å¯¹è±¡
+	AudioClip soundLost = java.applet.Applet.newAudioClip(file3); // å¤±è´¥å£°éŸ³å‰ªè¾‘å¯¹è±¡
 
 	public ChessPanel() {
 	}
@@ -78,13 +84,13 @@ public class ChessPanel extends JPanel {
 		isChessOn = new int[N][N];
 		h = blackchess.getIconHeight() * (N - 1);
 		w = blackchess.getIconWidth() * (N - 1);
-		insx = 0;// ²åÈëÆå×ÓµÄÎ»ÖÃ
+		insx = 0;// æ’å…¥æ£‹å­çš„ä½ç½®
 		insy = 0;
-		mousePoint = new Point();// Êó±êµ±Ç°Î»ÖÃ
+		mousePoint = new Point();// é¼ æ ‡å½“å‰ä½ç½®
 
 	}
 
-	public void reset() { // ÖØ¿ªÒ»¾Ö
+	public void reset() { // é‡å¼€ä¸€å±€
 		winer = NONE_ONE;
 		for (int i = 0; i < N; i++)
 			for (int j = 0; j < N; j++) {
@@ -92,17 +98,17 @@ public class ChessPanel extends JPanel {
 			}
 		chess_num = 0;
 		win = false;
-		win_bw = 2;// »ñÊ¤ÆåÉ«
-		bw = 0;// µ±Ç°Ó¦¸ÃÏÂµÄÆåÉ«£¬0±íºÚÉ«
+		win_bw = 2;// è·èƒœæ£‹è‰²
+		bw = 0;// å½“å‰åº”è¯¥ä¸‹çš„æ£‹è‰²ï¼Œ0è¡¨é»‘è‰²
 		x_max = 15;
-		x_min = 0; // ±ß½çÖµ,ÓÃÓÚËÙ¶ÈÓÅ»¯
+		x_min = 0; // è¾¹ç•Œå€¼,ç”¨äºé€Ÿåº¦ä¼˜åŒ–
 		y_max = 15;
 		y_min = 0;
 		lastStepTime = System.currentTimeMillis();
 		repaint();
 	}
 
-	public void showMousePos(Point p) { // µ÷ÊÔÓÃ£¬ÏÔÊ¾Êó±êÎ»ÖÃ
+	public void showMousePos(Point p) { // è°ƒè¯•ç”¨ï¼Œæ˜¾ç¤ºé¼ æ ‡ä½ç½®
 		int cw;
 		cw = h / N;
 		mousePoint.x = p.x / cw;
@@ -119,40 +125,40 @@ public class ChessPanel extends JPanel {
 		return r;
 	}
 
-	public void gameOver(int r_winer) { // ÓÎÏ·Ê¤¸ºÒÑ·Ö
+	public void gameOver(int r_winer) { // æ¸¸æˆèƒœè´Ÿå·²åˆ†
 		winer = r_winer;
 	}
 
-	public void paint(Graphics g) { // ÕûÌå²¼¾Ö
+	public void paint(Graphics g) { // æ•´ä½“å¸ƒå±€
 		super.paint(g);
 		paintChessMap(g);
 		paintChess(g);
 		if (winer == BLACK_ONE) {
-			g.drawString(new String("ÓÎÏ·½áÊø£¡ºÚÆå»ñÊ¤£¡"), 500, 200);
+			g.drawString(new String("æ¸¸æˆç»“æŸï¼é»‘æ£‹è·èƒœï¼"), 500, 200);
 
 		} else if (winer == WHITE_ONE) {
-			g.drawString(new String("ÓÎÏ·½áÊø£¡°×Æå»ñÊ¤£¡"), 500, 200);
+			g.drawString(new String("æ¸¸æˆç»“æŸï¼ç™½æ£‹è·èƒœï¼"), 500, 200);
 		}
 	}
 
-	private void paintChessMap(Graphics g) { // »­ÆåÅÌ
+	private void paintChessMap(Graphics g) { // ç”»æ£‹ç›˜
 		map.paintIcon(this, g, 10, 10);
 		int j;
 		g.setColor(Color.BLACK);
-		for (j = 0; j < N; j++) { // »­Ïß
+		for (j = 0; j < N; j++) { // ç”»çº¿
 			g.drawLine(h / N / 2, h / N * j + h / N / 2, w - w / N + (N % 2) * (h / N / 2), h / N * j + h / N / 2);
 			g.drawLine(w / N * j + h / N / 2, h / N / 2, w / N * j + h / N / 2, h - h / N + (N % 2) * (h / N / 2));
 		}
-		g.fillRect(w / N * 7 + h / N / 2 - 3, h / N * 7 + h / N / 2 - 3, 6, 6);// »­5¸öºÚ·½¿é
+		g.fillRect(w / N * 7 + h / N / 2 - 3, h / N * 7 + h / N / 2 - 3, 6, 6);// ç”»5ä¸ªé»‘æ–¹å—
 		g.fillRect(w / N * 3 + h / N / 2 - 3, h / N * 3 + h / N / 2 - 3, 6, 6);
 		g.fillRect(w / N * 11 + h / N / 2 - 3, h / N * 3 + h / N / 2 - 3, 6, 6);
 		g.fillRect(w / N * 3 + h / N / 2 - 3, h / N * 11 + h / N / 2 - 3, 6, 6);
 		g.fillRect(w / N * 11 + h / N / 2 - 3, h / N * 11 + h / N / 2 - 3, 6, 6);
 	}
 
-	private void paintChess(Graphics g) { // »­Æå×Ó
+	private void paintChess(Graphics g) { // ç”»æ£‹å­
 		int i, j;
-		for (i = 0; i < N; i++){
+		for (i = 0; i < N; i++) {
 			for (j = 0; j < N; j++) {
 				if (isChessOn[i][j] == BLACK_ONE) {
 					blackchess.paintIcon(this, g, w / N * i, h / N * j);
@@ -161,79 +167,83 @@ public class ChessPanel extends JPanel {
 				}
 			}
 		}
-		if(chess_num>0){
-			i = pre[chess_num-1][0];
-			j = pre[chess_num-1][1];
+		if (chess_num > 0) {
+			i = pre[chess_num - 1][0];
+			j = pre[chess_num - 1][1];
 			red.paintIcon(this, g, w / N * i, h / N * j);
 		}
 	}
-	// -------------------------------ÏÂÆåÉùÒôÉèÖÃ-------------------------------------------------
+	// -------------------------------ä¸‹æ£‹å£°éŸ³è®¾ç½®-------------------------------------------------
 
-	// Âä×ÓÉùÒô
+	// è½å­å£°éŸ³
 	public void putVoice() {
 		soundPut.play();
 	}
 
-	// »ñÊ¤ÉùÒô
+	// è·èƒœå£°éŸ³
 	public void winVoice() {
 		soundWin.play();
 	}
 
-	// Ê§°ÜÉùÒô
+	// å¤±è´¥å£°éŸ³
 	public void lostVoice() {
 		soundLost.play();
 	}
-	
-	// ----------------------µçÄÔÏÂÆå-------------------------------//
-	public void putOne(int bwf) { // bwf ÆåÉ« 0:ºÚÉ« 1£º°×É«
+
+	// ----------------------ç”µè„‘ä¸‹æ£‹-------------------------------//
+	public boolean putOne(int bwf, long lastStepTimestamp) { // bwf æ£‹è‰² 0:é»‘è‰² 1ï¼šç™½è‰²
 		List<Point> bestPoints = new ArrayList<>();
 		int[][] board = new int[N][N];
-		for(int i=0;i<N;i++){
-			for(int j=0;j<N;j++){
-				board[i][j]=isChessOn[i][j];
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				board[i][j] = isChessOn[i][j];
 			}
 		}
-		AITask task = new AITask(board, able_flag, deep, weight, sbw, bwf, x_max, x_min, y_max, y_min, bestPoints);
+		AITask task = new AITask(board, able_flag, deep, weight, sbw, bwf, x_max, x_min, y_max, y_min, bestPoints,
+				chess_num, lastStepTimestamp);
 		FutureTask<List<Point>> futureTask = new FutureTask<List<Point>>(task);
 		Thread thread = new Thread(futureTask);
-		thread.setName("AITask-"+chess_num);
-        thread.start();
-	    try {
-	    	futureTask.get(timeLimit,TimeUnit.SECONDS);
+		thread.setName("AITask-" + (chess_num + 1) + "-" + lastStepTimestamp);
+		thread.start();
+		try {
+			futureTask.get(timeLimit, TimeUnit.SECONDS);
+		} catch (TimeoutException e) {
+			// System.out.println(timeLimit + "s timeout...");
 		} catch (Exception e) {
-			System.out.println("timeout");
+			e.printStackTrace();
 		}
-	    futureTask.cancel(true);
+		futureTask.cancel(true);
+		if (lastStepTimestamp != lastStepTime) {
+			return false;
+		}
 		int x = bestPoints.get(0).x;
 		int y = bestPoints.get(0).y;
-		System.out.println(x+"...."+y);
 
-		// ÅĞ¶ÏÊÇ·ñÒÑ·ÖÊ¤¸º
+		// åˆ¤æ–­æ˜¯å¦å·²åˆ†èƒœè´Ÿ
 		boolean flag = haveWin(x, y, bwf);
-		// ¼ÇÂ¼
+		// è®°å½•
 		update(x, y);
 		repaint();
 		putVoice();
-		// ÖØÉè±ß½çÖµ
+		// é‡è®¾è¾¹ç•Œå€¼
 		resetMaxMin(x, y);
-		// Ê¤¸ºÒÑ·Ö
+		// èƒœè´Ÿå·²åˆ†
 		if (flag)
 			wined(bwf);
 		if (!flag && chess_num >= drawn_num) {
 			win = true;
-			String str = drawn_num + "²½Ã»·ÖÊ¤¸º,ÅĞºÍÆå!";
+			String str = drawn_num + "æ­¥æ²¡åˆ†èƒœè´Ÿ,åˆ¤å’Œæ£‹!";
 			JOptionPane.showMessageDialog(null, str);
-			return;
 		}
+		return true;
 
 	}
 
-
-	// ---------ËÑË÷µ±Ç°ËÑË÷×´Ì¬¼«´óÖµ--------------------------------//
-	// alpha ×æÏÈ½ÚµãµÃµ½µÄµ±Ç°×îĞ¡×î´óÖµ£¬ÓÃÓÚalpha ¼ôÖ¦
-	// beta ×æÏÈ½ÚµãµÃµ½µÄµ±Ç°×î´ó×îĞ¡Öµ£¬ÓÃÓÚbeta ¼ôÖ¦¡£
-	// step »¹ÒªËÑË÷µÄ²½Êı
-	// return µ±Ç°ËÑË÷×ÓÊ÷¼«´óÖµ
+	// ---------æœç´¢å½“å‰æœç´¢çŠ¶æ€æå¤§å€¼--------------------------------//
+	// alpha ç¥–å…ˆèŠ‚ç‚¹å¾—åˆ°çš„å½“å‰æœ€å°æœ€å¤§å€¼ï¼Œç”¨äºalpha å‰ªæ
+	// beta ç¥–å…ˆèŠ‚ç‚¹å¾—åˆ°çš„å½“å‰æœ€å¤§æœ€å°å€¼ï¼Œç”¨äºbeta å‰ªæã€‚
+	// step è¿˜è¦æœç´¢çš„æ­¥æ•°
+	// return å½“å‰æœç´¢å­æ ‘æå¤§å€¼
 	protected int findMax(int alpha, int beta, int step) {
 		int max = alpha;
 		if (step == 0) {
@@ -243,33 +253,33 @@ public class ChessPanel extends JPanel {
 		for (int i = 0; i < rt.length; i++) {
 			int x = rt[i][0];
 			int y = rt[i][1];
-			if (getType(x, y, 1 - sbw) == 1) // µçÄÔ¿ÉÈ¡Ê¤
+			if (getType(x, y, 1 - sbw) == 1) // ç”µè„‘å¯å–èƒœ
 				return 100 * (getMark(1) + step * 1000);
 			isChessOn[x][y] = 1 - sbw;
-			// Ô¤´æµ±Ç°±ß½çÖµ
+			// é¢„å­˜å½“å‰è¾¹ç•Œå€¼
 			int temp1 = x_min, temp2 = x_max, temp3 = y_min, temp4 = y_max;
 			resetMaxMin(x, y);
 			int t = findMin(max, beta, step - 1);
 			isChessOn[x][y] = 2;
-			// »¹Ô­Ô¤Éè±ß½çÖµ
+			// è¿˜åŸé¢„è®¾è¾¹ç•Œå€¼
 			x_min = temp1;
 			x_max = temp2;
 			y_min = temp3;
 			y_max = temp4;
 			if (t > max)
 				max = t;
-			// beta ¼ôÖ¦
+			// beta å‰ªæ
 			if (max >= beta)
 				return max;
 		}
 		return max;
 	}
 
-	// -----------------------ËÑË÷µ±Ç°ËÑË÷×´Ì¬¼«Ğ¡Öµ---------------------------------//
-	// alpha ×æÏÈ½ÚµãµÃµ½µÄµ±Ç°×îĞ¡×î´óÖµ£¬ÓÃÓÚalpha ¼ôÖ¦
-	// beta ×æÏÈ½ÚµãµÃµ½µÄµ±Ç°×î´ó×îĞ¡Öµ£¬ÓÃÓÚbeta ¼ôÖ¦
-	// step »¹ÒªËÑË÷µÄ²½Êı
-	// return µ±Ç°ËÑË÷×ÓÊ÷¼«Ğ¡Öµ¡£
+	// -----------------------æœç´¢å½“å‰æœç´¢çŠ¶æ€æå°å€¼---------------------------------//
+	// alpha ç¥–å…ˆèŠ‚ç‚¹å¾—åˆ°çš„å½“å‰æœ€å°æœ€å¤§å€¼ï¼Œç”¨äºalpha å‰ªæ
+	// beta ç¥–å…ˆèŠ‚ç‚¹å¾—åˆ°çš„å½“å‰æœ€å¤§æœ€å°å€¼ï¼Œç”¨äºbeta å‰ªæ
+	// step è¿˜è¦æœç´¢çš„æ­¥æ•°
+	// return å½“å‰æœç´¢å­æ ‘æå°å€¼ã€‚
 	protected int findMin(int alpha, int beta, int step) {
 		int min = beta;
 		if (step == 0) {
@@ -280,22 +290,22 @@ public class ChessPanel extends JPanel {
 			int x = rt[i][0];
 			int y = rt[i][1];
 			int type = getType(x, y, sbw);
-			if (type == 1) // Íæ¼Ò³É5
+			if (type == 1) // ç©å®¶æˆ5
 				return -100 * (getMark(1) + step * 1000);
-			// Ô¤´æµ±Ç°±ß½çÖµ
+			// é¢„å­˜å½“å‰è¾¹ç•Œå€¼
 			int temp1 = x_min, temp2 = x_max, temp3 = y_min, temp4 = y_max;
 			isChessOn[x][y] = sbw;
 			resetMaxMin(x, y);
 			int t = findMax(alpha, min, step - 1);
 			isChessOn[x][y] = 2;
-			// »¹Ô­Ô¤Éè±ß½çÖµ
+			// è¿˜åŸé¢„è®¾è¾¹ç•Œå€¼
 			x_min = temp1;
 			x_max = temp2;
 			y_min = temp3;
 			y_max = temp4;
 			if (t < min)
 				min = t;
-			// alpha ¼ôÖ¦
+			// alpha å‰ªæ
 			if (min <= alpha) {
 				return min;
 			}
@@ -303,9 +313,9 @@ public class ChessPanel extends JPanel {
 		return min;
 	}
 
-	// -----------------Ñ¡È¡¾Ö²¿×îÓÅµÄ¼¸¸öÂä×Óµã×÷ÎªÏÂÒ»´ÎÀ©Õ¹µÄ½Úµã---------//
-	// bwf ÆåÉ« 0£ººÚÆå 1£º°×Æå
-	// return Ñ¡³öÀ´µÄ½Úµã×ø±ê
+	// -----------------é€‰å–å±€éƒ¨æœ€ä¼˜çš„å‡ ä¸ªè½å­ç‚¹ä½œä¸ºä¸‹ä¸€æ¬¡æ‰©å±•çš„èŠ‚ç‚¹---------//
+	// bwf æ£‹è‰² 0ï¼šé»‘æ£‹ 1ï¼šç™½æ£‹
+	// return é€‰å‡ºæ¥çš„èŠ‚ç‚¹åæ ‡
 	private int[][] getBests(int bwf) {
 
 		int i_min = (x_min == 0 ? x_min : x_min - 1);
@@ -318,22 +328,22 @@ public class ChessPanel extends JPanel {
 		for (int i = i_min; i < i_max; i++)
 			for (int j = j_min; j < j_max; j++)
 				if (isChessOn[i][j] == 2) {
-					if(Thread.currentThread().isInterrupted()){
+					if (Thread.currentThread().isInterrupted()) {
 						return null;
 					}
 					type_1 = getType(i, j, bwf);
-					if(type_1 == 1){
-						return new int[][]{{i,j}};
+					if (type_1 == 1) {
+						return new int[][] { { i, j } };
 					}
 					type_2 = getType(i, j, 1 - bwf);
-					if (able_flag && bwf == 0 && (type_1 == 20 || type_1 == 21 || type_1 == 22)) // ½ûÊÖÆåÎ»ÖÃ,²»¼ÇÂ¼
+					if (able_flag && bwf == 0 && (type_1 == 20 || type_1 == 21 || type_1 == 22)) // ç¦æ‰‹æ£‹ä½ç½®,ä¸è®°å½•
 						continue;
 					rt[n][0] = i;
 					rt[n][1] = j;
 					rt[n][2] = getMark(type_1) + getMark(type_2);
 					n++;
 				}
-		// ¶Ô¶şÎ¬Êı×éÅÅĞò
+		// å¯¹äºŒç»´æ•°ç»„æ’åº
 		Arrays.sort(rt, new ArrComparator());
 		int size = weight > n ? n : weight;
 		int[][] bests = new int[size][3];
@@ -341,38 +351,38 @@ public class ChessPanel extends JPanel {
 		return bests;
 	}
 
-	// ----------------------------¼ÆËãÖ¸¶¨·½Î»ÉÏµÄÆåĞÍ-------------------//
-	// x,y ·½ÏòÏß»ù×¼Ò»µã¡£
-	// ex,ey Ö¸¶¨·½Ïò²½½øÏòÁ¿¡£
-	// k Æå×ÓÑÕÉ«£¬0£ººÚÉ«£¬1£º°×É«
-	// ¸Ã·½ÏòÉÏµÄÆå×ÓÊıÄ¿ ÒÔ¼° »î¶È
+	// ----------------------------è®¡ç®—æŒ‡å®šæ–¹ä½ä¸Šçš„æ£‹å‹-------------------//
+	// x,y æ–¹å‘çº¿åŸºå‡†ä¸€ç‚¹ã€‚
+	// ex,ey æŒ‡å®šæ–¹å‘æ­¥è¿›å‘é‡ã€‚
+	// k æ£‹å­é¢œè‰²ï¼Œ0ï¼šé»‘è‰²ï¼Œ1ï¼šç™½è‰²
+	// è¯¥æ–¹å‘ä¸Šçš„æ£‹å­æ•°ç›® ä»¥åŠ æ´»åº¦
 	private int[] count(int x, int y, int ex, int ey, int bwf) {
-		// ¸Ã·½ÏòÃ»ÒâÒå,·µ»Ø0
-		if (!makesense(x, y, ex, ey, bwf))// makesense()ÎªÅĞ¶ÏÊÇ·ñ´óÓÚ5
+		// è¯¥æ–¹å‘æ²¡æ„ä¹‰,è¿”å›0
+		if (!makesense(x, y, ex, ey, bwf))// makesense()ä¸ºåˆ¤æ–­æ˜¯å¦å¤§äº5
 			return new int[] { 0, 1 };
 
-		// Õı·½Ïò ÒÔ¼° ·´·½ÏòÆå×Ó¸öÊı
+		// æ­£æ–¹å‘ ä»¥åŠ åæ–¹å‘æ£‹å­ä¸ªæ•°
 		int rt_1 = 1, rt_2 = 1;
-		// ×ÜÆå×Ó¸öÊı
+		// æ€»æ£‹å­ä¸ªæ•°
 		int rt = 1;
-		// Õı·½Ïò ÒÔ¼° ·´·½ÏòÁ¬×ÓµÄ»î¶È
+		// æ­£æ–¹å‘ ä»¥åŠ åæ–¹å‘è¿å­çš„æ´»åº¦
 		int ok_1 = 0, ok_2 = 0;
-		// ×Ü»î¶È
+		// æ€»æ´»åº¦
 		int ok = 0;
-		// Á¬×ÓÖĞ¼äÓĞÎŞ¿Õ¸ñ
+		// è¿å­ä¸­é—´æœ‰æ— ç©ºæ ¼
 		boolean flag_mid1 = false, flag_mid2 = false;
-		// Á¬×ÓÖĞ¼ä¿Õ¸ñµÄÎ»ÖÃ
+		// è¿å­ä¸­é—´ç©ºæ ¼çš„ä½ç½®
 		int flag_i1 = 1, flag_i2 = 1;
 
 		if (isChessOn[x][y] != 2) {
 			throw new IllegalArgumentException("position x,y must be empty!..");
 		}
 		int i;
-		// ÍùÕı·½ÏòËÑË÷
+		// å¾€æ­£æ–¹å‘æœç´¢
 		for (i = 1; x + i * ex < 15 && x + i * ex >= 0 && y + i * ey < 15 && y + i * ey >= 0; i++) {
 			if (isChessOn[x + i * ex][y + i * ey] == bwf)
 				rt_1++;
-			// Î»ÖÃÎª¿Õ,ÈôÖĞ¿Õ±êÖ¾Îªfalse,Ôò¼ÇÎªÖĞ¿Õ²¢¼ÌĞøËÑË÷ ·ñÔò,break
+			// ä½ç½®ä¸ºç©º,è‹¥ä¸­ç©ºæ ‡å¿—ä¸ºfalse,åˆ™è®°ä¸ºä¸­ç©ºå¹¶ç»§ç»­æœç´¢ å¦åˆ™,break
 			else if (isChessOn[x + i * ex][y + i * ey] == 2) {
 				if (!flag_mid1) {
 					flag_mid1 = true;
@@ -380,38 +390,38 @@ public class ChessPanel extends JPanel {
 				} else
 					break;
 			}
-			// Î»ÖÃÎª¶Ô·½Æå×Ó
+			// ä½ç½®ä¸ºå¯¹æ–¹æ£‹å­
 			else
 				break;
 		}
-		// ¼ÆËãÕı·½Ïò»î¶È,,
-		// ×îºóÒ»¸öÎ»ÖÃ²»³¬¹ı±ß½ç
+		// è®¡ç®—æ­£æ–¹å‘æ´»åº¦,,
+		// æœ€åä¸€ä¸ªä½ç½®ä¸è¶…è¿‡è¾¹ç•Œ
 		if (x + i * ex < 15 && x + i * ex >= 0 && y + i * ey < 15 && y + i * ey >= 0) {
-			// ×îºóÒ»¸öÎ»ÖÃÎª¿ÕÎ» +1»î
+			// æœ€åä¸€ä¸ªä½ç½®ä¸ºç©ºä½ +1æ´»
 			if (isChessOn[x + i * ex][y + i * ey] == 2) {
 				ok_1++;
-				// ÈôÊÇÔÚÎ²²¿¼ì²âµ½Á¬ĞøµÄ¿Õ¸ñ¶øÍË³öËÑË÷,Ôò²»ËãÓĞÖĞ¿Õ
+				// è‹¥æ˜¯åœ¨å°¾éƒ¨æ£€æµ‹åˆ°è¿ç»­çš„ç©ºæ ¼è€Œé€€å‡ºæœç´¢,åˆ™ä¸ç®—æœ‰ä¸­ç©º
 				if (rt_1 == flag_i1)
 					flag_mid1 = false;
-				// ÈôÖĞ¿ÕµÄÎ»ÖÃÔÚ4ÒÔÏÂ ÇÒ Æå×ÓÊı>=4,ÔòÕâÒ»±ßµÄ4·Ç»î
+				// è‹¥ä¸­ç©ºçš„ä½ç½®åœ¨4ä»¥ä¸‹ ä¸” æ£‹å­æ•°>=4,åˆ™è¿™ä¸€è¾¹çš„4éæ´»
 				if (flag_mid1 && rt_1 > 3 && flag_i1 < 4) {
 					ok_1--;
 				}
 			}
-			// ×îºóÒ»¸öÎ»ÖÃ²»ÊÇ¿Õ¸ñ,ÇÒËÑË÷ÁË2²½ÒÔÉÏ,ÈôÇ°Ò»¸öÊÇ¿Õ¸ñ, Ôò²»ËãÖĞ¿Õ,ÇÒÎª»îµÄ±ß
+			// æœ€åä¸€ä¸ªä½ç½®ä¸æ˜¯ç©ºæ ¼,ä¸”æœç´¢äº†2æ­¥ä»¥ä¸Š,è‹¥å‰ä¸€ä¸ªæ˜¯ç©ºæ ¼, åˆ™ä¸ç®—ä¸­ç©º,ä¸”ä¸ºæ´»çš„è¾¹
 			else if (isChessOn[x + i * ex][y + i * ey] != bwf && i >= 2)
 				if (isChessOn[x + (i - 1) * ex][y + (i - 1) * ey] == 2) {
 					ok_1++;
 					flag_mid1 = false;
 				}
 		}
-		// ×îºóÒ»¸öÎ»ÖÃÊÇ±ß½ç ËÑË÷ÁË2²½ÒÔÉÏ,ÇÒÇ°Ò»¸öÊÇ¿Õ¸ñ, Ôò²»ËãÖĞ¿Õ,ÇÒÎª»îµÄ±ß
+		// æœ€åä¸€ä¸ªä½ç½®æ˜¯è¾¹ç•Œ æœç´¢äº†2æ­¥ä»¥ä¸Š,ä¸”å‰ä¸€ä¸ªæ˜¯ç©ºæ ¼, åˆ™ä¸ç®—ä¸­ç©º,ä¸”ä¸ºæ´»çš„è¾¹
 		else if (i >= 2 && isChessOn[x + (i - 1) * ex][y + (i - 1) * ey] == 2) {
 			ok_1++;
 			flag_mid1 = false;
 		}
 
-		// Íù·´·½ÏòËÑË÷
+		// å¾€åæ–¹å‘æœç´¢
 		for (i = 1; x - i * ex >= 0 && x - i * ex < 15 && y - i * ey >= 0 && y - i * ey < 15; i++) {
 			if (isChessOn[x - i * ex][y - i * ey] == bwf)
 				rt_2++;
@@ -424,7 +434,7 @@ public class ChessPanel extends JPanel {
 			} else
 				break;
 		}
-		// ¼ÆËã·´·½Ïò»î¶È
+		// è®¡ç®—åæ–¹å‘æ´»åº¦
 		if (x - i * ex < 15 && x - i * ex >= 0 && y - i * ey < 15 && y - i * ey >= 0) {
 			if (isChessOn[x - i * ex][y - i * ey] == 2) {
 				ok_2++;
@@ -443,34 +453,34 @@ public class ChessPanel extends JPanel {
 			flag_mid2 = false;
 		}
 
-		// ------------------·ÖÎöÆå×ÓÀàĞÍ
-		// Á½±ß¶¼Ã»ÖĞ¿Õ,Ö±½ÓºÏ³É
+		// ------------------åˆ†ææ£‹å­ç±»å‹
+		// ä¸¤è¾¹éƒ½æ²¡ä¸­ç©º,ç›´æ¥åˆæˆ
 		if (!flag_mid1 && !flag_mid2) {
 			rt = rt_1 + rt_2 - 1;
 			ok = ok_1 + ok_2;
 			return new int[] { rt, ok };
 		}
-		// Á½±ß¶¼ÓĞÖĞ¿Õ
+		// ä¸¤è¾¹éƒ½æœ‰ä¸­ç©º
 		else if (flag_mid1 && flag_mid2) {
 			int temp = flag_i1 + flag_i2 - 1;
-			// ÅĞ¶ÏÖĞ¼äµÄ´¿Á¬×ÓÊı,ÔÚ5ÒÔÉÏ,Ö±½Ó·µ»Ø; Îª4,·µ»Ø»î4;
+			// åˆ¤æ–­ä¸­é—´çš„çº¯è¿å­æ•°,åœ¨5ä»¥ä¸Š,ç›´æ¥è¿”å›; ä¸º4,è¿”å›æ´»4;
 			if (temp >= 5)
 				return new int[] { temp, 2 };
 			if (temp == 4)
 				return new int[] { temp, 2 };
-			// ÏÈ¿´ÓĞÃ»ËÀ4,ÔÙ¿´ÓĞÃ»»î3,Ê£ÏÂÖ»ÄÜÊÇËÀ3
+			// å…ˆçœ‹æœ‰æ²¡æ­»4,å†çœ‹æœ‰æ²¡æ´»3,å‰©ä¸‹åªèƒ½æ˜¯æ­»3
 			if (rt_1 + flag_i2 - 1 >= 4 || rt_2 + flag_i1 - 1 >= 4)
 				return new int[] { 4, 1 };
 			if (rt_1 + flag_i2 - 1 == 3 && ok_1 > 0 || rt_2 + flag_i1 - 1 == 3 && ok_2 > 0)
 				return new int[] { 3, 2 };
 			return new int[] { 3, 1 };
 		}
-		// ÓĞÒ»±ßÓĞÖĞ¿Õ
+		// æœ‰ä¸€è¾¹æœ‰ä¸­ç©º
 		else {
-			// ×ÜÆå×ÓÊıÉÙÓÚ5,Ö±½ÓºÏ³É
+			// æ€»æ£‹å­æ•°å°‘äº5,ç›´æ¥åˆæˆ
 			if (rt_1 + rt_2 - 1 < 5)
 				return new int[] { rt_1 + rt_2 - 1, ok_1 + ok_2 };
-			// ¶àÓÚ5,ÏÈÕÒ³É5,ÔÙÕÒ»î4,Ê£ÏÂµÄÖ»ÄÜÊÇËÀ4
+			// å¤šäº5,å…ˆæ‰¾æˆ5,å†æ‰¾æ´»4,å‰©ä¸‹çš„åªèƒ½æ˜¯æ­»4
 			else {
 				if (flag_mid1 && rt_2 + flag_i1 - 1 >= 5)
 					return new int[] { rt_2 + flag_i1 - 1, ok_2 + 1 };
@@ -487,12 +497,12 @@ public class ChessPanel extends JPanel {
 		}
 	}
 
-	// ----------------------------ÅĞ¶ÏÖ¸¶¨·½ÏòÏÂÆåÊÇ·ñÓĞÒâÒå,¼´×î´ó¿ÉÄÜµÄÆå×ÓÊıÊÇ·ñ
+	// ----------------------------åˆ¤æ–­æŒ‡å®šæ–¹å‘ä¸‹æ£‹æ˜¯å¦æœ‰æ„ä¹‰,å³æœ€å¤§å¯èƒ½çš„æ£‹å­æ•°æ˜¯å¦
 	// >=5-------------------------------//
-	// x,y ÆÀ¹ÀµÄ»ù×¼µã
-	// ex,ey ·½ÏòÏòÁ¿
-	// k ÆåÉ«
-	// true:ÓĞÒâÒå false:Ã»ÒâÒå
+	// x,y è¯„ä¼°çš„åŸºå‡†ç‚¹
+	// ex,ey æ–¹å‘å‘é‡
+	// k æ£‹è‰²
+	// true:æœ‰æ„ä¹‰ false:æ²¡æ„ä¹‰
 	private Boolean makesense(int x, int y, int ex, int ey, int bwf) {
 
 		int rt = 1;
@@ -511,97 +521,97 @@ public class ChessPanel extends JPanel {
 	}
 
 	// ------------------------------------
-	// ÆåĞÍÅĞ±ğ-------------------------------------//
-	// x,y Âä×ÓÎ»ÖÃ
-	// bwf ÆåÉ« 0£ººÚ×Ó£¬1£º°××Ó
-	// ¶ÔÓ¦µÄÆåĞÍ£º ÆåĞÍ´úÂë¶ÔÓ¦ÈçÏÂ£º
-	// 1£º³É5
-	// 2£º³É»î4»òÕßÊÇË«ËÀ4»òÕßÊÇËÀ4»î3
-	// 3£º³ÉË«»î3
-	// 4£º³ÉËÀ3»î3
-	// 5£º³ÉËÀ4
-	// 6£ºµ¥»î3
-	// 7£º³ÉË«»î2
-	// 8£º³ÉËÀ3
-	// 9£º³ÉËÀ2»î2
-	// 10£º³É»î2
-	// 11£º³ÉËÀ2
-	// 12: ÆäËû
-	// 20: ³¤Á¬½ûÊÖ
-	// 21: Ë«ËÄ½ûÊÖ
-	// 22: Ë«»îÈı½ûÊÖ
+	// æ£‹å‹åˆ¤åˆ«-------------------------------------//
+	// x,y è½å­ä½ç½®
+	// bwf æ£‹è‰² 0ï¼šé»‘å­ï¼Œ1ï¼šç™½å­
+	// å¯¹åº”çš„æ£‹å‹ï¼š æ£‹å‹ä»£ç å¯¹åº”å¦‚ä¸‹ï¼š
+	// 1ï¼šæˆ5
+	// 2ï¼šæˆæ´»4æˆ–è€…æ˜¯åŒæ­»4æˆ–è€…æ˜¯æ­»4æ´»3
+	// 3ï¼šæˆåŒæ´»3
+	// 4ï¼šæˆæ­»3æ´»3
+	// 5ï¼šæˆæ­»4
+	// 6ï¼šå•æ´»3
+	// 7ï¼šæˆåŒæ´»2
+	// 8ï¼šæˆæ­»3
+	// 9ï¼šæˆæ­»2æ´»2
+	// 10ï¼šæˆæ´»2
+	// 11ï¼šæˆæ­»2
+	// 12: å…¶ä»–
+	// 20: é•¿è¿ç¦æ‰‹
+	// 21: åŒå››ç¦æ‰‹
+	// 22: åŒæ´»ä¸‰ç¦æ‰‹
 
 	protected int getType(int x, int y, int bwf) {
 		if (isChessOn[x][y] != 2)
 			return -1;
 		int[][] types = new int[4][2];
-		types[0] = count(x, y, 0, 1, bwf); // ÊúÖ±
-		types[1] = count(x, y, 1, 0, bwf); // ºáÏò
-		types[2] = count(x, y, -1, 1, bwf); // Ğ±ÉÏ
-		types[3] = count(x, y, 1, 1, bwf); // Ğ±ÏÂ
-		// ¸÷ÖÖÆåĞÍµÄ·½ÏòµÄÊıÄ¿
+		types[0] = count(x, y, 0, 1, bwf); // ç«–ç›´
+		types[1] = count(x, y, 1, 0, bwf); // æ¨ªå‘
+		types[2] = count(x, y, -1, 1, bwf); // æ–œä¸Š
+		types[3] = count(x, y, 1, 1, bwf); // æ–œä¸‹
+		// å„ç§æ£‹å‹çš„æ–¹å‘çš„æ•°ç›®
 		int longfive = 0;
 		int five_OR_more = 0;
 		int four_died = 0, four_live = 0;
 		int three_died = 0, three_live = 0;
 		int two_died = 0, two_live = 0;
-		// ¸÷·½ÏòÉÏÆåĞÍµÄÅĞ±ğ
+		// å„æ–¹å‘ä¸Šæ£‹å‹çš„åˆ¤åˆ«
 		for (int k = 0; k < 4; k++) {
 			if (types[k][0] > 5) {
-				longfive++; // ³¤Á¬
+				longfive++; // é•¿è¿
 				five_OR_more++;
 			} else if (types[k][0] == 5)
-				five_OR_more++; // ³É5
+				five_OR_more++; // æˆ5
 			else if (types[k][0] == 4 && types[k][1] == 2)
-				four_live++; // »î4
+				four_live++; // æ´»4
 			else if (types[k][0] == 4 && types[k][1] != 2)
-				four_died++; // ËÀ4
+				four_died++; // æ­»4
 			else if (types[k][0] == 3 && types[k][1] == 2)
-				three_live++; // »î3
+				three_live++; // æ´»3
 			else if (types[k][0] == 3 && types[k][1] != 2)
-				three_died++; // ËÀ3
+				three_died++; // æ­»3
 			else if (types[k][0] == 2 && types[k][1] == 2)
-				two_live++; // »î2
+				two_live++; // æ´»2
 			else if (types[k][0] == 2 && types[k][1] != 2)
-				two_died++; // ËÀ2
+				two_died++; // æ­»2
 			else
 				;
 		}
-		// ×ÜÆåĞÍµÄÅĞ±ğ
-		if (bwf == 0 && able_flag) { // ºÚÆåÇÒÑ¡ÔñÓĞ½ûÊÖ
-			if (longfive != 0) // ³¤Á¬½ûÊÖ
+		// æ€»æ£‹å‹çš„åˆ¤åˆ«
+		if (bwf == 0 && able_flag) { // é»‘æ£‹ä¸”é€‰æ‹©æœ‰ç¦æ‰‹
+			if (longfive != 0) // é•¿è¿ç¦æ‰‹
 				return 20;
-			if (four_live + four_died >= 2) // Ë«4½ûÊÖ
+			if (four_live + four_died >= 2) // åŒ4ç¦æ‰‹
 				return 21;
-			if (three_live >= 2) // Ë«»îÈı½ûÊÖ
+			if (three_live >= 2) // åŒæ´»ä¸‰ç¦æ‰‹
 				return 22;
 		}
 		if (five_OR_more != 0)
-			return 1; // ³É5
+			return 1; // æˆ5
 		if (four_live != 0 || four_died >= 2 || four_died != 0 && three_live != 0)
-			return 2; // ³É»î4»òÕßÊÇË«ËÀ4»òÕßÊÇËÀ4»î3
+			return 2; // æˆæ´»4æˆ–è€…æ˜¯åŒæ­»4æˆ–è€…æ˜¯æ­»4æ´»3
 		if (three_live >= 2)
-			return 3; // ³ÉË«»î3
+			return 3; // æˆåŒæ´»3
 		if (three_died != 0 && three_live != 0)
-			return 4; // ³ÉËÀ3»î3
+			return 4; // æˆæ­»3æ´»3
 		if (four_died != 0)
-			return 5; // ³ÉËÀ4
+			return 5; // æˆæ­»4
 		if (three_live != 0)
-			return 6; // µ¥»î3
+			return 6; // å•æ´»3
 		if (two_live >= 2)
-			return 7; // ³ÉË«»î2
+			return 7; // æˆåŒæ´»2
 		if (three_died != 0)
-			return 8; // ³ÉËÀ3
+			return 8; // æˆæ­»3
 		if (two_live != 0 && two_died != 0)
-			return 9; // ³ÉËÀ2»î2
+			return 9; // æˆæ­»2æ´»2
 		if (two_live != 0)
-			return 10; // ³É»î2
+			return 10; // æˆæ´»2
 		if (two_died != 0)
-			return 11; // ³ÉËÀ2
+			return 11; // æˆæ­»2
 		return 12;
 	}
 
-	// --------------------------¶Ôµ±Ç°ÆåÃæ½øĞĞ´ò·Ö------------------------------------------------------------//
+	// --------------------------å¯¹å½“å‰æ£‹é¢è¿›è¡Œæ‰“åˆ†------------------------------------------------------------//
 
 	protected int evaluate() {
 		int rt = 0, mt_c = 1, mt_m = 1;
@@ -616,10 +626,10 @@ public class ChessPanel extends JPanel {
 		for (int i = i_min; i < i_max; i++)
 			for (int j = j_min; j < j_max; j++)
 				if (isChessOn[i][j] == 2) {
-					// µçÄÔÆåÃæ·ÖÊı
+					// ç”µè„‘æ£‹é¢åˆ†æ•°
 					int type = getType(i, j, 1 - sbw);
-					if (type == 1) // ÆåĞÍ1,ÆåĞÍ2ÒÔ¼°ÆåĞÍ3,¼ÓÈ¨.
-									// ·ÀÖ¹"4¸öË«»î3"µÄ¾Ö·Ö´óÓÚ"1¸öË«ËÄ"Ö®ÀàµÄ´íÎó³öÏÖ
+					if (type == 1) // æ£‹å‹1,æ£‹å‹2ä»¥åŠæ£‹å‹3,åŠ æƒ.
+									// é˜²æ­¢"4ä¸ªåŒæ´»3"çš„å±€åˆ†å¤§äº"1ä¸ªåŒå››"ä¹‹ç±»çš„é”™è¯¯å‡ºç°
 						rt += 30 * mt_c * getMark(type);
 
 					else if (type == 2)
@@ -628,7 +638,7 @@ public class ChessPanel extends JPanel {
 						rt += 3 * mt_c * getMark(type);
 					else
 						rt += mt_c * getMark(type);
-					// Íæ¼ÒÆåÃæ·ÖÊı
+					// ç©å®¶æ£‹é¢åˆ†æ•°
 					type = getType(i, j, sbw);
 					if (type == 1)
 						rt -= 30 * mt_m * getMark(type);
@@ -642,7 +652,7 @@ public class ChessPanel extends JPanel {
 		return rt;
 	}
 
-	// --------------------------------ÏÂÆåºó,¸üĞÂĞÅÏ¢-----------------------------//
+	// --------------------------------ä¸‹æ£‹å,æ›´æ–°ä¿¡æ¯-----------------------------//
 	void update(int x, int y) {
 		isChessOn[x][y] = bw;
 		bw = 1 - bw;
@@ -651,14 +661,18 @@ public class ChessPanel extends JPanel {
 		chess_num++;
 		long tmp = lastStepTime;
 		lastStepTime = System.currentTimeMillis();
-		System.out.println(
-				"Step " + chess_num + ": x=" + x + ",y=" + y + ", cost " + (lastStepTime - tmp) / 1000 + "s.");
+		String color = (bw == 0 ? "White" : "Black");
+		lastStep = X_AXIS[x] + Y_AXIS[y];
+		System.out.println(chess_num + ":" + color + ":" + lastStep + ", cost " + (lastStepTime - tmp) / 1000 + "s.");
+		// System.out.println(
+		// "Step " + chess_num + ": x=" + x + ",y=" + y + ", cost " +
+		// (lastStepTime - tmp) / 1000 + "s.");
 	}
 
 	// --------------------------------------
-	// ÏÂÆåºó,ÖØÉè±ß½çÖµ------------------------------//
-	// x µ±Ç°ÏÂÆåÎ»ÖÃµÄx×ø±ê
-	// y µ±Ç°ÏÂÆåÎ»ÖÃµÄy×ø±ê
+	// ä¸‹æ£‹å,é‡è®¾è¾¹ç•Œå€¼------------------------------//
+	// x å½“å‰ä¸‹æ£‹ä½ç½®çš„xåæ ‡
+	// y å½“å‰ä¸‹æ£‹ä½ç½®çš„yåæ ‡
 
 	public void resetMaxMin(int x, int y) {
 		if (x - 1 >= 0)
@@ -672,9 +686,9 @@ public class ChessPanel extends JPanel {
 
 	}
 
-	// ------------------------------------------¶Ô·ÖÊıÏàÍ¬µÄÂä×Óµã£¬Ëæ»úÑ¡È¡-------------------//
-	// kt Ëæ»úÒò×Ó ÖµÔ½Ğ¡£¬±»Ñ¡È¡µÄ¸ÅÂÊÔ½´ó
-	// return ÊÇ·ñÑ¡Ôñ¸ÃÎ»ÖÃ
+	// ------------------------------------------å¯¹åˆ†æ•°ç›¸åŒçš„è½å­ç‚¹ï¼Œéšæœºé€‰å–-------------------//
+	// kt éšæœºå› å­ å€¼è¶Šå°ï¼Œè¢«é€‰å–çš„æ¦‚ç‡è¶Šå¤§
+	// return æ˜¯å¦é€‰æ‹©è¯¥ä½ç½®
 
 	private boolean randomTest(int kt) {
 		Random rm = new Random();
@@ -682,9 +696,9 @@ public class ChessPanel extends JPanel {
 	}
 
 	// -------------------------------------
-	// ²»Í¬ÆåĞÍ¶ÔÓ¦·ÖÊı---------------------------------
-	// k ÆåĞÍ´úºÅ
-	// return ¶ÔÓ¦·ÖÊı
+	// ä¸åŒæ£‹å‹å¯¹åº”åˆ†æ•°---------------------------------
+	// k æ£‹å‹ä»£å·
+	// return å¯¹åº”åˆ†æ•°
 	private int getMark(int k) {
 		switch (k) {
 		case 1:
@@ -711,16 +725,16 @@ public class ChessPanel extends JPanel {
 			return 3;
 		case 12:
 			return 2;
-		default: // ½ûÊÖÆåĞÍ
+		default: // ç¦æ‰‹æ£‹å‹
 			return 0;
 		}
 	}
 
 	// ---------------------------------------
-	// ÅĞ¶ÏÊÇ·ñÒÑ·Ö³öÊ¤¸º---------------------------------------------
-	// x Âä×Óµãx×ø±ê y Âä×Óµãy×ø±ê
-	// bwf ÆåÉ« 0:ºÚÉ« 1£º°×É«
-	// return true:·Ö³öÊ¤¸º false:Î´·Ö³öÊ¤¸º
+	// åˆ¤æ–­æ˜¯å¦å·²åˆ†å‡ºèƒœè´Ÿ---------------------------------------------
+	// x è½å­ç‚¹xåæ ‡ y è½å­ç‚¹yåæ ‡
+	// bwf æ£‹è‰² 0:é»‘è‰² 1ï¼šç™½è‰²
+	// return true:åˆ†å‡ºèƒœè´Ÿ false:æœªåˆ†å‡ºèƒœè´Ÿ
 
 	public boolean haveWin(int x, int y, int bwf) {
 		boolean flag = false;
@@ -734,28 +748,30 @@ public class ChessPanel extends JPanel {
 			flag = true;
 		if (!flag && count(x, y, 1, 1, bwf)[0] >= 5)
 			flag = true;
-		// ²âÊÔÓÃ,¼¤»î´ËĞĞ´úÂë,²»»áÓĞÊäÓ®.. flag = false;
+		// æµ‹è¯•ç”¨,æ¿€æ´»æ­¤è¡Œä»£ç ,ä¸ä¼šæœ‰è¾“èµ¢.. flag = false;
 		return flag;
 	}
 
 	public void wined(int bw) {
 		boolean hh = getHumanhuman();
-		if (!hh) { // ²»ÊÇÈËÈË¶ÔŞÄ
+		String str;
+		if (!hh) { // ä¸æ˜¯äººäººå¯¹å¼ˆ
 			win = true;
 			win_bw = bw;
-			String str = (bw == sbw ? "¹§Ï²£¡ÄãÓ®ÁË£¡" : "µçÄÔÓ®ÁË,Äã»¹Òª¼ÌĞøÅ¬Á¦°¡£¡");
+			str = (bw == sbw ? "æ­å–œï¼ä½ èµ¢äº†ï¼" : "ç”µè„‘èµ¢äº†,ä½ è¿˜è¦ç»§ç»­åŠªåŠ›å•Šï¼");
 			if (bw == sbw)
 				winVoice();
 			else
 				lostVoice();
 			JOptionPane.showMessageDialog(null, str);
-		} else { // ÈËÈË¶ÔŞÄ
+		} else { // äººäººå¯¹å¼ˆ
 			win = true;
 			win_bw = bw;
-			String str = (bw == BLACK_ONE ? "¹§Ï²£¡ºÚÆå»ñÊ¤£¡" : "¹§Ï²£¡°×Æå»ñÊ¤£¡");
+			str = (bw == BLACK_ONE ? "æ­å–œï¼é»‘æ£‹è·èƒœï¼" : "æ­å–œï¼ç™½æ£‹è·èƒœï¼");
 			winVoice();
 			JOptionPane.showMessageDialog(null, str);
 		}
+		System.out.println(str + new Date());
 	}
 
 	public void setHumanhuman(boolean humanhuman) {
